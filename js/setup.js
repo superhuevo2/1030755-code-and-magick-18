@@ -50,29 +50,29 @@ function chooseRandom(arr) {
 }
 
 /**
- * Returns generated name of a wizzard
- * @param {array} firstNames array of first names for generating wizzard's name.
- * @param {array} lastNames array of last names for generating wizzard's name.
- * @param {array} coatColors array of colors for generating wizzard's coat.
- * @param {array} eyesColors array of colors for generating wizzard's eyes.
- * @return {object} an object that contains wizzard's name and colors of eyes and coat.
+ * Returns generated name of a wizard
+ * @param {array} firstNames array of first names for generating wizard's name.
+ * @param {array} lastNames array of last names for generating wizard's name.
+ * @param {array} coatColors array of colors for generating wizard's coat.
+ * @param {array} eyesColors array of colors for generating wizard's eyes.
+ * @return {object} an object that contains wizard's name and colors of eyes and coat.
  */
-function generateWizzard(firstNames, lastNames, coatColors, eyesColors) {
-  var wizzard = {};
+function generateWizard(firstNames, lastNames, coatColors, eyesColors) {
+  var wizard = {};
 
-  wizzard.name = chooseRandom(firstNames) + ' ' + chooseRandom(lastNames);
-  wizzard.coatColors = chooseRandom(coatColors);
-  wizzard.eyesColors = chooseRandom(eyesColors);
+  wizard.name = chooseRandom(firstNames) + ' ' + chooseRandom(lastNames);
+  wizard.coatColors = chooseRandom(coatColors);
+  wizard.eyesColors = chooseRandom(eyesColors);
 
-  return wizzard;
+  return wizard;
 }
 
 // работа с данными
 
-var wizzardList = [];
+var wizardList = [];
 
 for (var i = 0; i < 4; i++) {
-  wizzardList.push(generateWizzard(FIRST_NAMES, LAST_NAMES, COAT_COLORS, EYE_COLORS));
+  wizardList.push(generateWizard(FIRST_NAMES, LAST_NAMES, COAT_COLORS, EYE_COLORS));
 }
 
 // работа с DOM
@@ -89,12 +89,12 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .querySelector('.setup-similar-item');
 var fragment = document.createDocumentFragment();
 
-for (var n = 0; n < wizzardList.length; n++) {
+for (var n = 0; n < wizardList.length; n++) {
   var element = similarWizardTemplate.cloneNode(true);
 
-  element.querySelector('.setup-similar-label').textContent = wizzardList[i].name;
-  element.querySelector('.wizard-coat').setAttribute('fill', wizzardList[i].coatColors);
-  element.querySelector('.wizard-eyes').setAttribute('fill', wizzardList[i].eyesColors);
+  element.querySelector('.setup-similar-label').textContent = wizardList[n].name;
+  element.querySelector('.wizard-coat').setAttribute('fill', wizardList[n].coatColors);
+  element.querySelector('.wizard-eyes').setAttribute('fill', wizardList[n].eyesColors);
 
   fragment.appendChild(element);
 }
