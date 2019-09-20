@@ -37,6 +37,12 @@ var EYE_COLORS = [
   'green'
 ];
 
+var PROPERTIES = {
+  '.setup-similar-label': 'name',
+  '.wizard-coat': 'coatColors',
+  '.wizard-eyes': 'eyesColors'
+};
+
 
 // описание функций
 
@@ -67,6 +73,32 @@ function generateWizard(firstNames, lastNames, coatColors, eyesColors) {
   return wizard;
 }
 
+/**
+ * made a set of DOM's object from the data and from template
+ * @param {object} template a template of DOM's object.
+ * @param {array} data a list of objects for writing to template.
+ * @param {array} properties an object which shows correspondence between the data and template's properties.
+ * @return {object} DOM's object made from template.
+ */
+
+function makeFragment(template, data, properties) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < data.length; i++) {
+    var element = template.cloneNode(true);
+
+    for (var p in properties) {
+      if (properties[p] === 'name') {
+        element.querySelector(p).textContent = data[i][properties[p]]; // почему тут не работает через точку data[i].properties[p] ?
+      } else {
+        element.querySelector(p).setAttribute('fill', data[i][properties[p]]);
+      }
+    }
+    fragment.appendChild(element);
+  }
+  return fragment;
+}
+
 // работа с данными
 
 var wizardList = [];
@@ -87,17 +119,7 @@ similarCharacterBlock.classList.remove('hidden');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content
     .querySelector('.setup-similar-item');
-var fragment = document.createDocumentFragment();
 
-for (var n = 0; n < wizardList.length; n++) {
-  var element = similarWizardTemplate.cloneNode(true);
+charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList, PROPERTIES));
 
-  element.querySelector('.setup-similar-label').textContent = wizardList[n].name;
-  element.querySelector('.wizard-coat').setAttribute('fill', wizardList[n].coatColors);
-  element.querySelector('.wizard-eyes').setAttribute('fill', wizardList[n].eyesColors);
-
-  fragment.appendChild(element);
-}
-
-charactersListElement.appendChild(fragment);
 similarCharacterBlock.classList.remove('hidden');
