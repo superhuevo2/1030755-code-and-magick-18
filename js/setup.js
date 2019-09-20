@@ -57,18 +57,14 @@ function chooseRandom(arr) {
 
 /**
  * Returns generated name of a wizard
- * @param {array} firstNames array of first names for generating wizard's name.
- * @param {array} lastNames array of last names for generating wizard's name.
- * @param {array} coatColors array of colors for generating wizard's coat.
- * @param {array} eyesColors array of colors for generating wizard's eyes.
- * @return {object} an object that contains wizard's name and colors of eyes and coat.
+ * @return {object} an object that contains wizard's name and colors of eyes and a coat.
  */
 function generateWizard(firstNames, lastNames, coatColors, eyesColors) {
   var wizard = {};
 
-  wizard.name = chooseRandom(firstNames) + ' ' + chooseRandom(lastNames);
-  wizard.coatColors = chooseRandom(coatColors);
-  wizard.eyesColors = chooseRandom(eyesColors);
+  wizard.name = chooseRandom(FIRST_NAMES) + ' ' + chooseRandom(LAST_NAMES);
+  wizard.coatColors = chooseRandom(COAT_COLORS);
+  wizard.eyesColors = chooseRandom(EYE_COLORS);
 
   return wizard;
 }
@@ -104,7 +100,7 @@ function makeFragment(template, data, properties) {
 var wizardList = [];
 
 for (var i = 0; i < 4; i++) {
-  wizardList.push(generateWizard(FIRST_NAMES, LAST_NAMES, COAT_COLORS, EYE_COLORS));
+  wizardList.push(generateWizard());
 }
 
 // работа с DOM
