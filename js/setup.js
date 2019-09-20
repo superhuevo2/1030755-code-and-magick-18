@@ -59,7 +59,7 @@ function chooseRandom(arr) {
  * Returns generated name of a wizard
  * @return {object} an object that contains wizard's name and colors of eyes and a coat.
  */
-function generateWizard(firstNames, lastNames, coatColors, eyesColors) {
+function generateWizard() {
   var wizard = {};
 
   wizard.name = chooseRandom(FIRST_NAMES) + ' ' + chooseRandom(LAST_NAMES);
