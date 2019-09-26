@@ -44,7 +44,8 @@ var PROPERTIES = {
 };
 
 var KEY_ENTER = 13;
-var KEY_ESCAPE = 27
+var KEY_ESCAPE = 27;
+var FORM_ACTION_URL = 'https://js.dump.academy/code-and-magick';
 
 
 // описание функций
@@ -124,11 +125,15 @@ function isBlockOpen(block) {
 }
 
 /**
- * send form
+ * send form to dest
  * @param {Object} form
+ * @param {string} dest
  */
-function sendForm(form) {
-  form.submit()
+function sendForm(form, dest) {
+  form.action = dest;
+  form.method = 'post';
+  form.enctype = 'multipart/form-data';
+  form.submit();
 }
 
 // работа с данными
@@ -140,7 +145,7 @@ for (var i = 0; i < 4; i++) {
 }
 
 // работа с DOM
-
+// create similar characters
 var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
 
@@ -156,6 +161,7 @@ charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList
 
 similarCharacterBlock.classList.remove('hidden');
 
+//open and close setup dialog
 var blockSetup = document.querySelector('.setup');
 var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
 var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
@@ -191,11 +197,15 @@ closeButtonBlockSetup.addEventListener('keydown', function closeSetupKeydownEnte
 })
 
 saveButtonBlockSetup.addEventListener('click', function saveButtonClickHandler(evt) {
-  sendForm(setupForm);
+  sendForm(setupForm, FORM_ACTION_URL);
 })
 
 saveButtonBlockSetup.addEventListener('keydown', function saveButtonKeydownEnterHandler(evt) {
   if (evt.keyCode === KEY_ENTER) {
-    sendForm(setupForm);
+    sendForm(setupForm, FORM_ACTION_URL);
   }
 })
+
+//character's name input validation
+
+//userNameBlockSetup
