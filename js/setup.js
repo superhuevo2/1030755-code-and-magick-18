@@ -43,6 +43,9 @@ var PROPERTIES = {
   '.wizard-eyes': 'eyesColors'
 };
 
+var KEY_ENTER = 13;
+var KEY_ESCAPE = 27
+
 
 // описание функций
 
@@ -95,6 +98,39 @@ function makeFragment(template, data, properties) {
   return fragment;
 }
 
+/**
+ * remove class 'hidden' of object
+ * @param {object} block
+ */
+function openBlock(block) {
+  block.classList.remove('hidden');
+}
+
+/**
+ * add class 'hidden' to object
+ * @param {object} block
+ */
+function closeBlock(block) {
+  block.classList.add('hidden');
+}
+
+/**
+ * checks if block is open now
+ * @param {Object} block
+ * @return {Boolean}
+ */
+function isBlockOpen(block) {
+  return !block.classList.contains('hidden')
+}
+
+/**
+ * send form
+ * @param {Object} form
+ */
+function sendForm(form) {
+  form.submit()
+}
+
 // работа с данными
 
 var wizardList = [];
@@ -119,3 +155,47 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
 charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList, PROPERTIES));
 
 similarCharacterBlock.classList.remove('hidden');
+
+var blockSetup = document.querySelector('.setup');
+var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
+var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
+var blockSetupOpen = document.querySelector('.setup-open');
+var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
+var saveButtonBlockSetup = blockSetup.querySelector('.setup-submit');
+var setupForm = blockSetup.querySelector('.setup-wizard-form')
+
+blockSetupOpen.addEventListener('click', function openSetupClickHandler(evt) {
+  openBlock(blockSetup);
+})
+
+blockSetupOpenIcon.addEventListener('keydown', function OpenSetupKeydownEnterHandler(evt) {
+  if (evt.keyCode == KEY_ENTER) {
+    openBlock(blockSetup);
+  }
+})
+
+closeButtonBlockSetup.addEventListener('click', function closeSetupClickHandler(evt) {
+  closeBlock(blockSetup);
+})
+
+document.addEventListener('keydown', function closeSetupKeydownEscHandler(evt) {
+  if (isBlockOpen(blockSetup) && document.activeElement !== userNameBlockSetup && evt.keyCode === KEY_ESCAPE) {
+    closeBlock(blockSetup);
+  }
+})
+
+closeButtonBlockSetup.addEventListener('keydown', function closeSetupKeydownEnterHandler(evt) {
+  if (evt.keyCode === KEY_ENTER) {
+    closeBlock(blockSetup);
+  }
+})
+
+saveButtonBlockSetup.addEventListener('click', function saveButtonClickHandler(evt) {
+  sendForm(setupForm);
+})
+
+saveButtonBlockSetup.addEventListener('keydown', function saveButtonKeydownEnterHandler(evt) {
+  if (evt.keyCode === KEY_ENTER) {
+    sendForm(setupForm);
+  }
+})
