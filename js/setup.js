@@ -272,7 +272,7 @@ for (var i = 0; i < NUMBER_OF_WIZARD; i++) {
 userDialog.classList.remove('hidden');
 similarCharacterBlock.classList.remove('hidden');
 charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList, PROPERTIES));
-similarCharacterBlock.classList.remove('hidden');
+
 
 // open and close setup dialog
 
