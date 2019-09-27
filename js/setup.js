@@ -38,11 +38,11 @@ var EYE_COLORS = [
 ];
 
 var FIREBALL_COLOR = [
-  '#ee4830',
-  '#30a8ee',
-  '#5ce6c0',
-  '#e848d5',
-  '#e6e848'
+  'rgb(238, 72, 48)',
+  'rgb(48, 168, 238)',
+  'rgb(92, 230, 192)',
+  'rgb(232, 72, 213)',
+  'rgb(230, 232, 72)'
 ];
 
 var NEXT_COLOR_INDEX = [1];
@@ -158,7 +158,8 @@ function setFillAttr(element, featureList) {
 
   if (attrValue === null) {
     newColor = newColor = featureList[NEXT_COLOR_INDEX];
-  } else {
+  }
+  else {
     currentColor = attrValue.slice(6, attrValue.length);
     currentIndex = featureList.indexOf(currentColor);
     newIndex = changeIndex(currentIndex, featureList);
@@ -174,22 +175,20 @@ function setFillAttr(element, featureList) {
  * @param {array} featureList
  */
 function setBgAttr(element, featureList) {
-  var attrValue = element.getAttribute('style');
-  var currentColor;
+  var currentColor = element.style.backgroundColor;
   var currentIndex;
   var newIndex;
   var newColor;
 
-  if (attrValue === null) {
+  if (currentColor === '') {
     newColor = featureList[NEXT_COLOR_INDEX];
   } else {
-    currentColor = attrValue.slice(18, attrValue.length);
     currentIndex = featureList.indexOf(currentColor);
     newIndex = changeIndex(currentIndex, featureList);
     newColor = featureList[newIndex];
   }
 
-  element.setAttribute('style', 'background-color: ' + newColor);
+  element.style.backgroundColor = newColor;
 }
 
 /**
