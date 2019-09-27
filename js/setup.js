@@ -71,8 +71,6 @@ var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
 var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
 var blockSetupOpen = document.querySelector('.setup-open');
 var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
-var saveButtonBlockSetup = blockSetup.querySelector('.setup-submit');
-var setupForm = blockSetup.querySelector('.setup-wizard-form');
 var setupWizard = document.querySelector('.setup-wizard');
 var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
 var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
@@ -138,13 +136,12 @@ function makeFragment(template, data, properties) {
  */
 function changeIndex(currentIndex, listOfElements) {
   var newIndex;
-  if (currentIndex == listOfElements.length - 1) {
+  if (currentIndex === listOfElements.length - 1) {
     newIndex = 0;
+  } else {
+    newIndex = currentIndex + 1;
   }
-  else {
-    newIndex = currentIndex + 1
-  }
-  return newIndex
+  return newIndex;
 }
 
 /**
@@ -153,16 +150,15 @@ function changeIndex(currentIndex, listOfElements) {
  * @param {array} featureList
  */
 function setFillAttr(element, featureList) {
-  var attrValue = element.getAttribute('style')
+  var attrValue = element.getAttribute('style');
   var currentColor;
   var currentIndex;
   var newIndex;
   var newColor;
 
-  if (attrValue == null) {
+  if (attrValue === null) {
     newColor = newColor = featureList[NEXT_COLOR_INDEX];
-  }
-  else {
+  } else {
     currentColor = attrValue.slice(6, attrValue.length);
     currentIndex = featureList.indexOf(currentColor);
     newIndex = changeIndex(currentIndex, featureList);
@@ -178,16 +174,15 @@ function setFillAttr(element, featureList) {
  * @param {array} featureList
  */
 function setBgAttr(element, featureList) {
-  var attrValue = element.getAttribute('style')
+  var attrValue = element.getAttribute('style');
   var currentColor;
   var currentIndex;
   var newIndex;
   var newColor;
 
-  if (attrValue == null) {
-    newColor = newColor = featureList[NEXT_COLOR_INDEX];
-  }
-  else {
+  if (attrValue === null) {
+    newColor = featureList[NEXT_COLOR_INDEX];
+  } else {
     currentColor = attrValue.slice(18, attrValue.length);
     currentIndex = featureList.indexOf(currentColor);
     newIndex = changeIndex(currentIndex, featureList);
@@ -213,7 +208,7 @@ function popupKeydownEscHandler(evt) {
 function openPopup() {
   blockSetup.classList.remove('hidden');
   document.addEventListener('keydown', popupKeydownEscHandler);
-};
+}
 
 /**
  * close the popup
@@ -234,7 +229,7 @@ function openSetupClickHandler() {
 
 
 function OpenSetupKeydownEnterHandler(evt) {
-  if (evt.keyCode == KEY_ENTER) {
+  if (evt.keyCode === KEY_ENTER) {
     openPopup();
   }
 }
@@ -280,17 +275,17 @@ similarCharacterBlock.classList.remove('hidden');
 charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList, PROPERTIES));
 similarCharacterBlock.classList.remove('hidden');
 
-//open and close setup dialog
+// open and close setup dialog
 
-blockSetupOpen.addEventListener('click', openSetupClickHandler)
+blockSetupOpen.addEventListener('click', openSetupClickHandler);
 
-blockSetupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler)
+blockSetupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler);
 
-closeButtonBlockSetup.addEventListener('click', closeSetupClickHandler)
+closeButtonBlockSetup.addEventListener('click', closeSetupClickHandler);
 
 closeButtonBlockSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
 
-//change property of the character
+// change property of the character
 
 setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
 
