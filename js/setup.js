@@ -45,11 +45,15 @@ var FIREBALL_COLOR = [
   '#e6e848'
 ];
 
+var NEXT_COLOR_INDEX = [1];
+
 var PROPERTIES = {
   '.setup-similar-label': 'name',
   '.wizard-coat': 'coatColors',
   '.wizard-eyes': 'eyesColors'
 };
+
+var NUMBER_OF_WIZARD = 4;
 
 var KEY_ENTER = 13;
 var KEY_ESCAPE = 27;
@@ -126,6 +130,77 @@ function makeFragment(template, data, properties) {
   return fragment;
 }
 
+/**
+ * increment index within length of list
+ * @param {number} currentIndex
+ * @param {Array} listOfElements
+ * @return {number}
+ */
+function changeIndex(currentIndex, listOfElements) {
+  var newIndex;
+  if (currentIndex == listOfElements.length - 1) {
+    newIndex = 0;
+  }
+  else {
+    newIndex = currentIndex + 1
+  }
+  return newIndex
+}
+
+/**
+ * set next fill value of an element from a list
+ * @param {object} element
+ * @param {array} featureList
+ */
+function setFillAttr(element, featureList) {
+  var attrValue = element.getAttribute('style')
+  var currentColor;
+  var currentIndex;
+  var newIndex;
+  var newColor;
+
+  if (attrValue == null) {
+    newColor = newColor = featureList[NEXT_COLOR_INDEX];
+  }
+  else {
+    currentColor = attrValue.slice(6, attrValue.length);
+    currentIndex = featureList.indexOf(currentColor);
+    newIndex = changeIndex(currentIndex, featureList);
+    newColor = featureList[newIndex];
+  }
+
+  element.setAttribute('style', 'fill: ' + newColor);
+}
+
+/**
+ * set next background-color value of an element from a list
+ * @param {object} element
+ * @param {array} featureList
+ */
+function setBgAttr(element, featureList) {
+  var attrValue = element.getAttribute('style')
+  var currentColor;
+  var currentIndex;
+  var newIndex;
+  var newColor;
+
+  if (attrValue == null) {
+    newColor = newColor = featureList[NEXT_COLOR_INDEX];
+  }
+  else {
+    currentColor = attrValue.slice(18, attrValue.length);
+    currentIndex = featureList.indexOf(currentColor);
+    newIndex = changeIndex(currentIndex, featureList);
+    newColor = featureList[newIndex];
+  }
+
+  element.setAttribute('style', 'background-color: ' + newColor);
+}
+
+/**
+ * close popup by press Escape
+ * @param {*} evt
+ */
 function popupKeydownEscHandler(evt) {
   if (document.activeElement !== userNameBlockSetup && evt.keyCode === KEY_ESCAPE) {
     closePopup();
@@ -146,27 +221,54 @@ function openPopup() {
 function closePopup() {
   blockSetup.classList.add('hidden');
   document.removeEventListener('keydown', popupKeydownEscHandler);
+
+  setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
+  setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
+  setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
 }
 
-function setWizardFeature(featureName, listOfFeatures) {
-  var newColor = chooseRandom(listOfFeatures);
-  while (featureName === newColor) {
-    newColor = chooseRandom(newColor);
-  }
-  featureName.setAttribute('style', 'fill: ' + newColor);
+
+function openSetupClickHandler() {
+  openPopup();
 }
 
-function setWizardFireball() {
-  var newColor = chooseRandom(FIREBALL_COLOR);
-  while (setupWizardFireball === newColor) {
-    newColor = chooseRandom(newColor);
+
+function OpenSetupKeydownEnterHandler(evt) {
+  if (evt.keyCode == KEY_ENTER) {
+    openPopup();
   }
-  setupWizardFireball.setAttribute('style', 'background-color: ' + newColor);
+}
+
+
+function closeSetupClickHandler() {
+  closePopup();
+}
+
+
+function closeSetupKeydownEnterHandler(evt) {
+  if (evt.keyCode === KEY_ENTER) {
+    closePopup();
+  }
+}
+
+
+function wizardCoatClickHandler() {
+  setFillAttr(setupWizardCoat, COAT_COLORS);
+}
+
+
+function wizardEyesClickHandler() {
+  setFillAttr(setupWizardEyes, EYE_COLORS);
+}
+
+
+function wizardFireballClickHandler() {
+  setBgAttr(setupWizardFireball, FIREBALL_COLOR);
 }
 
 // работа с данными
 
-for (var i = 0; i < 4; i++) {
+for (var i = 0; i < NUMBER_OF_WIZARD; i++) {
   wizardList.push(generateWizard());
 }
 
@@ -180,36 +282,18 @@ similarCharacterBlock.classList.remove('hidden');
 
 //open and close setup dialog
 
-blockSetupOpen.addEventListener('click', function openSetupClickHandler() {
-  openPopup();
-})
+blockSetupOpen.addEventListener('click', openSetupClickHandler)
 
-blockSetupOpenIcon.addEventListener('keydown', function OpenSetupKeydownEnterHandler(evt) {
-  if (evt.keyCode == KEY_ENTER) {
-    openPopup();
-  }
-})
+blockSetupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler)
 
-closeButtonBlockSetup.addEventListener('click', function closeSetupClickHandler() {
-  closePopup();
-})
+closeButtonBlockSetup.addEventListener('click', closeSetupClickHandler)
 
-closeButtonBlockSetup.addEventListener('keydown', function closeSetupKeydownEnterHandler(evt) {
-  if (evt.keyCode === KEY_ENTER) {
-    closePopup();
-  }
-});
+closeButtonBlockSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
 
 //change property of the character
 
-setupWizardCoat.addEventListener('click', function wizardCoatClickHandler() {
-  setWizardFeature(setupWizardCoat, COAT_COLORS);
-});
+setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
 
-setupWizardEyes.addEventListener('click', function wizardEyesClickHandler() {
-  setWizardFeature(setupWizardEyes, EYE_COLORS);
-});
+setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
 
-setupWizardFireball.addEventListener('click', function wizardCoatClickHandler() {
-  setWizardFireball();
-});
+setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
