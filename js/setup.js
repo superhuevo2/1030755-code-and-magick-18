@@ -37,6 +37,14 @@ var EYE_COLORS = [
   'green'
 ];
 
+var FIREBALL_COLOR = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
 var PROPERTIES = {
   '.setup-similar-label': 'name',
   '.wizard-coat': 'coatColors',
@@ -44,7 +52,27 @@ var PROPERTIES = {
 };
 
 var KEY_ENTER = 13;
-var KEY_ESCAPE = 27
+var KEY_ESCAPE = 27;
+
+var wizardList = [];
+
+var userDialog = document.querySelector('.setup');
+var charactersListElement = userDialog.querySelector('.setup-similar-list');
+var similarCharacterBlock = userDialog.querySelector('.setup-similar');
+var similarWizardTemplate = document.querySelector('#similar-wizard-template')
+    .content
+    .querySelector('.setup-similar-item');
+var blockSetup = document.querySelector('.setup');
+var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
+var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
+var blockSetupOpen = document.querySelector('.setup-open');
+var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
+var saveButtonBlockSetup = blockSetup.querySelector('.setup-submit');
+var setupForm = blockSetup.querySelector('.setup-wizard-form');
+var setupWizard = document.querySelector('.setup-wizard');
+var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
+var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
+var setupWizardFireball = document.querySelector('.setup-fireball-wrap');
 
 
 // описание функций
@@ -88,7 +116,7 @@ function makeFragment(template, data, properties) {
 
     for (var p in properties) {
       if (properties[p] === 'name') {
-        element.querySelector(p).textContent = data[i][properties[p]]; // почему тут не работает через точку data[i].properties[p] ?
+        element.querySelector(p).textContent = data[i][properties[p]];
       } else {
         element.querySelector(p).setAttribute('fill', data[i][properties[p]]);
       }
@@ -98,34 +126,45 @@ function makeFragment(template, data, properties) {
   return fragment;
 }
 
-/**
- * remove class 'hidden' of object
- * @param {object} block
- */
-function openBlock(block) {
-  block.classList.remove('hidden');
+function popupKeydownEscHandler(evt) {
+  if (document.activeElement !== userNameBlockSetup && evt.keyCode === KEY_ESCAPE) {
+    closePopup();
+  }
 }
 
 /**
- * add class 'hidden' to object
- * @param {object} block
+ * open the popup
  */
-function closeBlock(block) {
-  block.classList.add('hidden');
-}
+function openPopup() {
+  blockSetup.classList.remove('hidden');
+  document.addEventListener('keydown', popupKeydownEscHandler);
+};
 
 /**
- * checks if block is open now
- * @param {Object} block
- * @return {Boolean}
+ * close the popup
  */
-function isBlockOpen(block) {
-  return !block.classList.contains('hidden')
+function closePopup() {
+  blockSetup.classList.add('hidden');
+  document.removeEventListener('keydown', popupKeydownEscHandler);
+}
+
+function setWizardFeature(featureName, listOfFeatures) {
+  var newColor = chooseRandom(listOfFeatures);
+  while (featureName === newColor) {
+    newColor = chooseRandom(newColor);
+  }
+  featureName.setAttribute('style', 'fill: ' + newColor);
+}
+
+function setWizardFireball() {
+  var newColor = chooseRandom(FIREBALL_COLOR);
+  while (setupWizardFireball === newColor) {
+    newColor = chooseRandom(newColor);
+  }
+  setupWizardFireball.setAttribute('style', 'background-color: ' + newColor);
 }
 
 // работа с данными
-
-var wizardList = [];
 
 for (var i = 0; i < 4; i++) {
   wizardList.push(generateWizard());
@@ -133,53 +172,44 @@ for (var i = 0; i < 4; i++) {
 
 // работа с DOM
 // create similar characters
-var userDialog = document.querySelector('.setup');
+
 userDialog.classList.remove('hidden');
-
-var charactersListElement = userDialog.querySelector('.setup-similar-list');
-var similarCharacterBlock = userDialog.querySelector('.setup-similar');
 similarCharacterBlock.classList.remove('hidden');
-
-var similarWizardTemplate = document.querySelector('#similar-wizard-template')
-    .content
-    .querySelector('.setup-similar-item');
-
 charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList, PROPERTIES));
-
 similarCharacterBlock.classList.remove('hidden');
 
 //open and close setup dialog
-var blockSetup = document.querySelector('.setup');
-var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
-var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
-var blockSetupOpen = document.querySelector('.setup-open');
-var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
-var saveButtonBlockSetup = blockSetup.querySelector('.setup-submit');
-var setupForm = blockSetup.querySelector('.setup-wizard-form')
 
-blockSetupOpen.addEventListener('click', function openSetupClickHandler(evt) {
-  openBlock(blockSetup);
+blockSetupOpen.addEventListener('click', function openSetupClickHandler() {
+  openPopup();
 })
 
 blockSetupOpenIcon.addEventListener('keydown', function OpenSetupKeydownEnterHandler(evt) {
   if (evt.keyCode == KEY_ENTER) {
-    openBlock(blockSetup);
+    openPopup();
   }
 })
 
-closeButtonBlockSetup.addEventListener('click', function closeSetupClickHandler(evt) {
-  closeBlock(blockSetup);
-})
-
-document.addEventListener('keydown', function closeSetupKeydownEscHandler(evt) {
-  if (isBlockOpen(blockSetup) && document.activeElement !== userNameBlockSetup && evt.keyCode === KEY_ESCAPE) {
-    closeBlock(blockSetup);
-  }
+closeButtonBlockSetup.addEventListener('click', function closeSetupClickHandler() {
+  closePopup();
 })
 
 closeButtonBlockSetup.addEventListener('keydown', function closeSetupKeydownEnterHandler(evt) {
   if (evt.keyCode === KEY_ENTER) {
-    closeBlock(blockSetup);
+    closePopup();
   }
-})
+});
 
+//change property of the character
+
+setupWizardCoat.addEventListener('click', function wizardCoatClickHandler() {
+  setWizardFeature(setupWizardCoat, COAT_COLORS);
+});
+
+setupWizardEyes.addEventListener('click', function wizardEyesClickHandler() {
+  setWizardFeature(setupWizardEyes, EYE_COLORS);
+});
+
+setupWizardFireball.addEventListener('click', function wizardCoatClickHandler() {
+  setWizardFireball();
+});
