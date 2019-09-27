@@ -44,8 +44,7 @@ var PROPERTIES = {
 };
 
 var KEY_ENTER = 13;
-var KEY_ESCAPE = 27;
-var FORM_ACTION_URL = 'https://js.dump.academy/code-and-magick';
+var KEY_ESCAPE = 27
 
 
 // описание функций
@@ -124,18 +123,6 @@ function isBlockOpen(block) {
   return !block.classList.contains('hidden')
 }
 
-/**
- * send form to dest
- * @param {Object} form
- * @param {string} dest
- */
-function sendForm(form, dest) {
-  form.action = dest;
-  form.method = 'post';
-  form.enctype = 'multipart/form-data';
-  form.submit();
-}
-
 // работа с данными
 
 var wizardList = [];
@@ -196,16 +183,3 @@ closeButtonBlockSetup.addEventListener('keydown', function closeSetupKeydownEnte
   }
 })
 
-saveButtonBlockSetup.addEventListener('click', function saveButtonClickHandler(evt) {
-  sendForm(setupForm, FORM_ACTION_URL);
-})
-
-saveButtonBlockSetup.addEventListener('keydown', function saveButtonKeydownEnterHandler(evt) {
-  if (evt.keyCode === KEY_ENTER) {
-    sendForm(setupForm, FORM_ACTION_URL);
-  }
-})
-
-//character's name input validation
-
-//userNameBlockSetup
