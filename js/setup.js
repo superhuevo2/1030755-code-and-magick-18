@@ -158,8 +158,7 @@ function setFillAttr(element, featureList) {
 
   if (attrValue === null) {
     newColor = newColor = featureList[NEXT_COLOR_INDEX];
-  }
-  else {
+  } else {
     currentColor = attrValue.slice(6, attrValue.length);
     currentIndex = featureList.indexOf(currentColor);
     newIndex = changeIndex(currentIndex, featureList);
