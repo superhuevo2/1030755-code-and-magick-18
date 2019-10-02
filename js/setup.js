@@ -55,9 +55,6 @@ var PROPERTIES = {
 
 var NUMBER_OF_WIZARD = 4;
 
-var KEY_ENTER = 13;
-var KEY_ESCAPE = 27;
-
 // описание функций
 
 /**
@@ -109,137 +106,6 @@ function makeFragment(template, data, properties) {
   return fragment;
 }
 
-/**
- * increment index within length of list
- * @param {number} currentIndex
- * @param {Array} listOfElements
- * @return {number}
- */
-function changeIndex(currentIndex, listOfElements) {
-  var newIndex;
-  if (currentIndex === listOfElements.length - 1) {
-    newIndex = 0;
-  } else {
-    newIndex = currentIndex + 1;
-  }
-  return newIndex;
-}
-
-/**
- * set next fill value of an element from a list
- * @param {object} element
- * @param {array} featureList
- */
-function setFillAttr(element, featureList) {
-  var attrValue = element.getAttribute('style');
-  var currentColor;
-  var currentIndex;
-  var newIndex;
-  var newColor;
-
-  if (attrValue === null) {
-    newColor = newColor = featureList[NEXT_COLOR_INDEX];
-  } else {
-    currentColor = attrValue.slice(6, attrValue.length);
-    currentIndex = featureList.indexOf(currentColor);
-    newIndex = changeIndex(currentIndex, featureList);
-    newColor = featureList[newIndex];
-  }
-
-  element.setAttribute('style', 'fill: ' + newColor);
-}
-
-/**
- * set next background-color value of an element from a list
- * @param {object} element
- * @param {array} featureList
- */
-function setBgAttr(element, featureList) {
-  var currentColor = element.style.backgroundColor;
-  var currentIndex;
-  var newIndex;
-  var newColor;
-
-  if (currentColor === '') {
-    newColor = featureList[NEXT_COLOR_INDEX];
-  } else {
-    currentIndex = featureList.indexOf(currentColor);
-    newIndex = changeIndex(currentIndex, featureList);
-    newColor = featureList[newIndex];
-  }
-
-  element.style.backgroundColor = newColor;
-}
-
-/**
- * close popup by press Escape
- * @param {*} evt
- */
-function popupKeydownEscHandler(evt) {
-  if (document.activeElement !== userNameBlockSetup && evt.keyCode === KEY_ESCAPE) {
-    closePopup();
-  }
-}
-
-/**
- * open the popup
- */
-function openPopup() {
-  blockSetup.classList.remove('hidden');
-  document.addEventListener('keydown', popupKeydownEscHandler);
-}
-
-/**
- * close the popup
- */
-function closePopup() {
-  blockSetup.classList.add('hidden');
-  document.removeEventListener('keydown', popupKeydownEscHandler);
-
-  setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
-  setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
-  setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
-}
-
-
-function openSetupClickHandler() {
-  openPopup();
-}
-
-
-function OpenSetupKeydownEnterHandler(evt) {
-  if (evt.keyCode === KEY_ENTER) {
-    openPopup();
-  }
-}
-
-
-function closeSetupClickHandler() {
-  closePopup();
-}
-
-
-function closeSetupKeydownEnterHandler(evt) {
-  if (evt.keyCode === KEY_ENTER) {
-    closePopup();
-  }
-}
-
-
-function wizardCoatClickHandler() {
-  setFillAttr(setupWizardCoat, COAT_COLORS);
-}
-
-
-function wizardEyesClickHandler() {
-  setFillAttr(setupWizardEyes, EYE_COLORS);
-}
-
-
-function wizardFireballClickHandler() {
-  setBgAttr(setupWizardFireball, FIREBALL_COLOR);
-}
-
 // работа с данными
 
 var wizardList = [];
@@ -249,39 +115,15 @@ for (var i = 0; i < NUMBER_OF_WIZARD; i++) {
 
 // работа с DOM
 
-var userDialog = document.querySelector('.setup');
-var charactersListElement = userDialog.querySelector('.setup-similar-list');
-var similarCharacterBlock = userDialog.querySelector('.setup-similar');
+var setup = document.querySelector('.setup');
+var charactersListElement = setup.querySelector('.setup-similar-list');
+var similarCharacterBlock = setup.querySelector('.setup-similar');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content
     .querySelector('.setup-similar-item');
-var blockSetup = document.querySelector('.setup');
-var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
-var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
-var blockSetupOpen = document.querySelector('.setup-open');
-var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
-var setupWizard = document.querySelector('.setup-wizard');
-var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
-var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
-var setupWizardFireball = document.querySelector('.setup-fireball-wrap');
 
 // create similar characters
 
-userDialog.classList.remove('hidden');
+setup.classList.remove('hidden');
 similarCharacterBlock.classList.remove('hidden');
 charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList, PROPERTIES));
-
-
-// open and close setup dialog
-
-blockSetupOpen.addEventListener('click', openSetupClickHandler);
-blockSetupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler);
-
-closeButtonBlockSetup.addEventListener('click', closeSetupClickHandler);
-closeButtonBlockSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
-
-// change property of the character
-
-setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
-setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
-setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
