@@ -20,27 +20,6 @@ function changeIndex(currentIndex, listOfElements) {
   return newIndex;
 }
 
-
-/**
- * open the popup
- */
-function openPopup() {
-  setup.classList.remove('hidden');
-  document.addEventListener('keydown', popupKeydownEscHandler);
-}
-
-/**
- * close the popup
- */
-function closePopup() {
-  setup.classList.add('hidden');
-  document.removeEventListener('keydown', popupKeydownEscHandler);
-
-  setupWizardCoat.removeEventListener('click', wizardCoatClickHandler);
-  setupWizardEyes.removeEventListener('click', wizardEyesClickHandler);
-  setupWizardFireball.removeEventListener('click', wizardFireballClickHandler);
-}
-
 /**
  * set next fill value of an element from a list
  * @param {object} element
@@ -87,6 +66,28 @@ function setBgAttr(element, featureList) {
   element.style.backgroundColor = newColor;
 }
 
+
+/**
+ * open the popup
+ */
+function openPopup() {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', popupKeydownEscHandler);
+}
+
+/**
+ * close the popup
+ */
+function closePopup() {
+  setup.classList.add('hidden');
+  setup.removeAttribute('style');
+  document.removeEventListener('keydown', popupKeydownEscHandler);
+
+  setupWizardCoat.removeEventListener('click', wizardCoatClickHandler);
+  setupWizardEyes.removeEventListener('click', wizardEyesClickHandler);
+  setupWizardFireball.removeEventListener('click', wizardFireballClickHandler);
+}
+
 /**
  * open popup by click
  */
@@ -121,6 +122,7 @@ function closeSetupKeydownEnterHandler(evt) {
   }
 }
 
+
 /**
  * close popup by press Esc
  * @param {*} evt
@@ -152,15 +154,51 @@ function wizardFireballClickHandler() {
   setBgAttr(setupWizardFireball, FIREBALL_COLOR);
 }
 
+function dialogHandlePicMouseDownHandler(evt) {
+  evt.preventDefault();
+  var origin = {
+    'x': evt.clientX,
+    'y': evt.clientY
+  };
+
+  function mouseMoveHandler(moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      'x': origin.x - moveEvt.clientX,
+      'y': origin.y - moveEvt.clientY,
+    };
+
+    origin = {
+      'x': moveEvt.clientX,
+      'y': moveEvt.clientY
+    };
+
+    setup.style.top = (setup.offsetTop - shift.y) + 'px';
+    setup.style.left = (setup.offsetLeft - shift.x) + 'px';
+  }
+
+  function mouseUpHandler(upEvt) {
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mousemove', mouseUpHandler);
+  }
+
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
+
+}
+
+
 var setupOpen = document.querySelector('.setup-open');
 var setupOpenIcon = document.querySelector('.setup-open-icon');
+
 var closeButtonSetup = setup.querySelector('.setup-close');
 var userNameSetup = setup.querySelector('.setup-user-name');
 
-var setupWizard = document.querySelector('.setup-wizard');
-var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
-var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
+var setupWizardCoat = document.querySelector('.wizard-coat');
+var setupWizardEyes = document.querySelector('.wizard-eyes');
 var setupWizardFireball = document.querySelector('.setup-fireball-wrap');
+
+var dialogHandle = setup.querySelector('.upload');
 
 setupOpen.addEventListener('click', openSetupClickHandler);
 setupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler);
@@ -171,3 +209,5 @@ closeButtonSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
 setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
 setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
 setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
+
+dialogHandle.addEventListener('mousedown', dialogHandlePicMouseDownHandler);
