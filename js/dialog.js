@@ -88,16 +88,6 @@ function setBgAttr(element, featureList) {
 }
 
 /**
- * close popup by press Escape
- * @param {*} evt
- */
-function popupKeydownEscHandler(evt) {
-  if (document.activeElement !== userNameSetup && evt.keyCode === KEY_ESCAPE) {
-    closePopup();
-  }
-}
-
-/**
  * open popup by click
  */
 function openSetupClickHandler() {
@@ -122,11 +112,21 @@ function closeSetupClickHandler() {
 }
 
 /**
- * close popup by press Esc
+ * close popup by press Enter
  * @param {*} evt
  */
 function closeSetupKeydownEnterHandler(evt) {
   if (evt.keyCode === KEY_ENTER) {
+    closePopup();
+  }
+}
+
+/**
+ * close popup by press Esc
+ * @param {*} evt
+ */
+function popupKeydownEscHandler(evt) {
+  if (document.activeElement !== userNameSetup && evt.keyCode === KEY_ESCAPE) {
     closePopup();
   }
 }
