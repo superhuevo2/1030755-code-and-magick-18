@@ -22,12 +22,12 @@ var LAST_NAMES = [
   'Ирвинг'
 ];
 var COAT_COLORS = [
-  'rgb(101,137,164)',
-  'rgb(241,43,107)',
-  'rgb(146,100,161)',
-  'rgb(56,159,117)',
-  'rgb(215,210,55)',
-  'rgb(0,0,0)'
+  'rgb(101, 137, 164)',
+  'rgb(241, 43, 107)',
+  'rgb(146, 100, 161)',
+  'rgb(56, 159, 117)',
+  'rgb(215, 210, 55)',
+  'rgb(0, 0, 0)'
 ];
 var EYE_COLORS = [
   'black',
@@ -57,25 +57,6 @@ var NUMBER_OF_WIZARD = 4;
 
 var KEY_ENTER = 13;
 var KEY_ESCAPE = 27;
-
-var wizardList = [];
-
-var userDialog = document.querySelector('.setup');
-var charactersListElement = userDialog.querySelector('.setup-similar-list');
-var similarCharacterBlock = userDialog.querySelector('.setup-similar');
-var similarWizardTemplate = document.querySelector('#similar-wizard-template')
-    .content
-    .querySelector('.setup-similar-item');
-var blockSetup = document.querySelector('.setup');
-var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
-var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
-var blockSetupOpen = document.querySelector('.setup-open');
-var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
-var setupWizard = document.querySelector('.setup-wizard');
-var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
-var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
-var setupWizardFireball = document.querySelector('.setup-fireball-wrap');
-
 
 // описание функций
 
@@ -261,11 +242,29 @@ function wizardFireballClickHandler() {
 
 // работа с данными
 
+var wizardList = [];
 for (var i = 0; i < NUMBER_OF_WIZARD; i++) {
   wizardList.push(generateWizard());
 }
 
 // работа с DOM
+
+var userDialog = document.querySelector('.setup');
+var charactersListElement = userDialog.querySelector('.setup-similar-list');
+var similarCharacterBlock = userDialog.querySelector('.setup-similar');
+var similarWizardTemplate = document.querySelector('#similar-wizard-template')
+    .content
+    .querySelector('.setup-similar-item');
+var blockSetup = document.querySelector('.setup');
+var closeButtonBlockSetup = blockSetup.querySelector('.setup-close');
+var userNameBlockSetup = blockSetup.querySelector('.setup-user-name');
+var blockSetupOpen = document.querySelector('.setup-open');
+var blockSetupOpenIcon = document.querySelector('.setup-open-icon');
+var setupWizard = document.querySelector('.setup-wizard');
+var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
+var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
+var setupWizardFireball = document.querySelector('.setup-fireball-wrap');
+
 // create similar characters
 
 userDialog.classList.remove('hidden');
@@ -276,17 +275,13 @@ charactersListElement.appendChild(makeFragment(similarWizardTemplate, wizardList
 // open and close setup dialog
 
 blockSetupOpen.addEventListener('click', openSetupClickHandler);
-
 blockSetupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler);
 
 closeButtonBlockSetup.addEventListener('click', closeSetupClickHandler);
-
 closeButtonBlockSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
 
 // change property of the character
 
 setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
-
 setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
-
 setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
