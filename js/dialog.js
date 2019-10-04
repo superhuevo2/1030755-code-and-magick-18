@@ -1,99 +1,6 @@
 'use strict';
 (function () {
-  var FIREBALL_COLOR = [
-    'rgb(238, 72, 48)',
-    'rgb(48, 168, 238)',
-    'rgb(92, 230, 192)',
-    'rgb(232, 72, 213)',
-    'rgb(230, 232, 72)'
-  ];
-
-  var NEXT_COLOR_INDEX = 1;
-
   var dragged = false;
-
-  /**
-   * increment index within length of list
-   * @param {number} currentIndex
-   * @param {Array} listOfElements
-   * @return {number}
-   */
-  function changeIndex(currentIndex, listOfElements) {
-    var newIndex;
-    if (currentIndex === listOfElements.length - 1) {
-      newIndex = 0;
-    } else {
-      newIndex = currentIndex + 1;
-    }
-    return newIndex;
-  }
-
-  /**
-   * set next fill value of an element from a list
-   * @param {object} element
-   * @param {array} featureList
-   */
-  function setFillAttr(element, featureList) {
-    var attrValue = element.getAttribute('style');
-    var currentColor;
-    var currentIndex;
-    var newIndex;
-    var newColor;
-
-    if (attrValue === null) {
-      newColor = featureList[NEXT_COLOR_INDEX];
-    } else {
-      currentColor = attrValue.slice(6, attrValue.length);
-      currentIndex = featureList.indexOf(currentColor);
-      newIndex = changeIndex(currentIndex, featureList);
-      newColor = featureList[newIndex];
-    }
-
-    element.setAttribute('style', 'fill: ' + newColor);
-  }
-
-  /**
-   * set next background-color value of an element from a list
-   * @param {object} element
-   * @param {array} featureList
-   */
-  function setBgAttr(element, featureList) {
-    var currentColor = element.style.backgroundColor;
-    var currentIndex;
-    var newIndex;
-    var newColor;
-
-    if (currentColor === '') {
-      newColor = featureList[NEXT_COLOR_INDEX];
-    } else {
-      currentIndex = featureList.indexOf(currentColor);
-      newIndex = changeIndex(currentIndex, featureList);
-      newColor = featureList[newIndex];
-    }
-
-    element.style.backgroundColor = newColor;
-  }
-
-  /**
-   * set a color of the coat by click
-   */
-  function wizardCoatClickHandler() {
-    setFillAttr(setupWizardCoat, window.setup.COAT_COLORS);
-  }
-
-  /**
-   * set a color of the eyes by click
-   */
-  function wizardEyesClickHandler() {
-    setFillAttr(setupWizardEyes, window.setup.EYE_COLORS);
-  }
-
-  /**
-   * set a color of the fireball by click
-   */
-  function wizardFireballClickHandler() {
-    setBgAttr(setupWizardFireball, FIREBALL_COLOR);
-  }
 
   function dialogHandlePicMouseDownHandler(evt) {
     evt.preventDefault();
@@ -137,7 +44,6 @@
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
-
   }
 
   /**
@@ -147,14 +53,10 @@
     setup.classList.add('hidden');
     setup.removeAttribute('style');
     document.removeEventListener('keydown', popupKeydownEscHandler);
-    closeButtonSetup.addEventListener('click', closeSetupClickHandler);
-    closeButtonSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
+    closeButtonSetup.removeEventListener('click', closeSetupClickHandler);
+    closeButtonSetup.removeEventListener('keydown', closeSetupKeydownEnterHandler);
 
-    setupWizardCoat.removeEventListener('click', wizardCoatClickHandler);
-    setupWizardEyes.removeEventListener('click', wizardEyesClickHandler);
-    setupWizardFireball.removeEventListener('click', wizardFireballClickHandler);
-
-    dialogHandle.addEventListener('mousedown', dialogHandlePicMouseDownHandler);
+    dialogHandle.removeEventListener('mousedown', dialogHandlePicMouseDownHandler);
   }
 
   /**
@@ -193,9 +95,9 @@
     closeButtonSetup.addEventListener('click', closeSetupClickHandler);
     closeButtonSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
 
-    setupWizardCoat.addEventListener('click', wizardCoatClickHandler);
-    setupWizardEyes.addEventListener('click', wizardEyesClickHandler);
-    setupWizardFireball.addEventListener('click', wizardFireballClickHandler);
+    window.colorize.changeColorByClick(setupWizardCoat, window.colorize.COAT_COLOR);
+    window.colorize.changeColorByClick(setupWizardEyes, window.colorize.EYE_COLOR);
+    window.colorize.changeColorByClick(setupWizardFireball, window.colorize.FIREBALL_COLOR);
 
     dialogHandle.addEventListener('mousedown', dialogHandlePicMouseDownHandler);
   }

@@ -22,28 +22,8 @@
     'Нионго',
     'Ирвинг'
   ];
-  var COAT_COLORS = [
-    'rgb(101, 137, 164)',
-    'rgb(241, 43, 107)',
-    'rgb(146, 100, 161)',
-    'rgb(56, 159, 117)',
-    'rgb(215, 210, 55)',
-    'rgb(0, 0, 0)'
-  ];
-  var EYE_COLORS = [
-    'black',
-    'red',
-    'blue',
-    'yellow',
-    'green'
-  ];
 
   var NUMBER_OF_WIZARD = 4;
-
-  window.setup = {
-    COAT_COLORS: COAT_COLORS,
-    EYE_COLORS: EYE_COLORS
-  };
 
   // описание функций
 
@@ -64,8 +44,8 @@
     var wizard = {};
 
     wizard.name = chooseRandom(FIRST_NAMES) + ' ' + chooseRandom(LAST_NAMES);
-    wizard.coatColors = chooseRandom(COAT_COLORS);
-    wizard.eyesColors = chooseRandom(EYE_COLORS);
+    wizard.coatColors = chooseRandom(window.colorize.COAT_COLOR);
+    wizard.eyesColors = chooseRandom(window.colorize.EYE_COLOR);
 
     return wizard;
   }
