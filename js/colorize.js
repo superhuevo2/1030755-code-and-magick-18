@@ -68,9 +68,9 @@
   }
 
   function changeColorByClick(element, colorList) {
-    element.addEventListener('click', function() {
+    element.addEventListener('click', function () {
       getNextColor(element, colorList);
-    })
+    });
   }
 
 
