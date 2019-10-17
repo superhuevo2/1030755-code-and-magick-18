@@ -1,8 +1,17 @@
 'use strict';
 (function () {
+  var getNextColor = window.colorize.getNextColor;
+  var COAT_COLOR = window.colorize.COAT_COLOR;
+  var EYE_COLOR = window.colorize.EYE_COLOR;
+  var FIREBALL_COLOR = window.colorize.FIREBALL_COLOR;
+  var isEnterEvent = window.util.isEnterEvent;
+  var isEscEvent = window.util.isEscEvent;
+  var save = window.backend.save;
+
+
   var dragged = false;
 
-  function dialogHandlePicMouseDownHandler(evt) {
+  function moveDialogHandler(evt) {
     evt.preventDefault();
     var origin = {
       'x': evt.clientX,
@@ -56,7 +65,12 @@
     closeButtonSetup.removeEventListener('click', closeSetupClickHandler);
     closeButtonSetup.removeEventListener('keydown', closeSetupKeydownEnterHandler);
 
-    dialogHandle.removeEventListener('mousedown', dialogHandlePicMouseDownHandler);
+    setupWizardCoat.removeEventListener('click', coatClickHandler);
+    setupWizardEyes.removeEventListener('click', eyesClickHandler);
+    setupWizardFireball.removeEventListener('click', fireballClickHandler);
+
+    dialogHandle.removeEventListener('mousedown', moveDialogHandler);
+    form.addEventListener('submit', formSubmitHandler);
   }
 
   /**
@@ -71,7 +85,7 @@
    * @param {*} evt
    */
   function closeSetupKeydownEnterHandler(evt) {
-    window.util.isEnterEvent(evt, closePopup);
+    isEnterEvent(evt, closePopup);
 
   }
 
@@ -81,8 +95,40 @@
    */
   function popupKeydownEscHandler(evt) {
     if (document.activeElement !== userNameSetup) {
-      window.util.isEscEvent(evt, closePopup);
+      isEscEvent(evt, closePopup);
     }
+  }
+
+  function createErrorPopup(message) {
+    var element = document.createElement('div');
+    element.innerHTML = 'Error ' + message + '<br>Press any key';
+    element.classList.add('error');
+    body.appendChild(element);
+    document.addEventListener('click', function () {
+      element.remove();
+    });
+    document.addEventListener('keydown', function () {
+      element.remove();
+    });
+  }
+
+
+  function formSubmitHandler(evt) {
+    evt.preventDefault();
+    var data = new FormData(form);
+    save(data, closePopup, createErrorPopup);
+  }
+
+  function coatClickHandler() {
+    getNextColor(setupWizardCoat, COAT_COLOR);
+  }
+
+  function eyesClickHandler() {
+    getNextColor(setupWizardEyes, EYE_COLOR);
+  }
+
+  function fireballClickHandler() {
+    getNextColor(setupWizardFireball, FIREBALL_COLOR);
   }
 
 
@@ -95,11 +141,12 @@
     closeButtonSetup.addEventListener('click', closeSetupClickHandler);
     closeButtonSetup.addEventListener('keydown', closeSetupKeydownEnterHandler);
 
-    window.colorize.changeColorByClick(setupWizardCoat, window.colorize.COAT_COLOR);
-    window.colorize.changeColorByClick(setupWizardEyes, window.colorize.EYE_COLOR);
-    window.colorize.changeColorByClick(setupWizardFireball, window.colorize.FIREBALL_COLOR);
+    setupWizardCoat.addEventListener('click', coatClickHandler);
+    setupWizardEyes.addEventListener('click', eyesClickHandler);
+    setupWizardFireball.addEventListener('click', fireballClickHandler);
 
-    dialogHandle.addEventListener('mousedown', dialogHandlePicMouseDownHandler);
+    dialogHandle.addEventListener('mousedown', moveDialogHandler);
+    form.addEventListener('submit', formSubmitHandler);
   }
 
   /**
@@ -113,10 +160,11 @@
    * open popup by press Enter
    * @param {*} evt
    */
-  function OpenSetupKeydownEnterHandler(evt) {
-    window.util.isEnterEvent(evt, openPopup);
+  function openSetupKeydownEnterHandler(evt) {
+    isEnterEvent(evt, openPopup);
   }
 
+  var body = document.querySelector('body');
   var setup = document.querySelector('.setup');
   var setupOpen = document.querySelector('.setup-open');
   var setupOpenIcon = document.querySelector('.setup-open-icon');
@@ -129,8 +177,14 @@
   var setupWizardFireball = document.querySelector('.setup-fireball-wrap');
 
   var dialogHandle = setup.querySelector('.upload');
+  var form = setup.querySelector('.setup-wizard-form');
 
   setupOpen.addEventListener('click', openSetupClickHandler);
-  setupOpenIcon.addEventListener('keydown', OpenSetupKeydownEnterHandler);
+  setupOpenIcon.addEventListener('keydown', openSetupKeydownEnterHandler);
+
+  window.dialog = {
+    createErrorPopup: createErrorPopup
+  };
+
 })();
 

@@ -51,7 +51,6 @@
     var currentIndex;
     var nextIndex;
     var nextColor;
-
     if (currentColor === '') {
       nextColor = colorList[NEXT_COLOR_INDEX];
     } else {
@@ -67,17 +66,11 @@
     }
   }
 
-  function changeColorByClick(element, colorList) {
-    element.addEventListener('click', function () {
-      getNextColor(element, colorList);
-    });
-  }
-
 
   window.colorize = {
     COAT_COLOR: COAT_COLOR,
     EYE_COLOR: EYE_COLOR,
     FIREBALL_COLOR: FIREBALL_COLOR,
-    changeColorByClick: changeColorByClick
+    getNextColor: getNextColor
   };
 })();
